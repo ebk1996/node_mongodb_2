@@ -1,0 +1,63 @@
+# Node modules
+node_modules/
+
+# Environment files (may contain secrets)
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+/pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directories
+/coverage/
+.nyc_output/
+
+# Build output
+/dist
+/build
+
+# Dependency directories
+bower_components/
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache
+.npm
+
+# Editor directories and files
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor swap files
+*~
+*.swp
+
+# Secrets
+*.pem
+*.key
+
+# MongoDB local data (if present accidentally)
+data/db/

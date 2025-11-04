@@ -1,0 +1,15 @@
+{
+  "name": "nodemongodb",
+  "version": "1.0.0",
+  "description": "\nodejs mongodb project",
+  "main": "db.js",
+  "author": "hlywd666@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "mongodb": "^6.16.0"
+  },
+  "scripts": {
+    "start": "node program.js"
+  }
+}
