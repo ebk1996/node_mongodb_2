@@ -195,6 +195,30 @@ npm run legacy
 - localStorage support required for age verification
 - File API support required for image uploads
 
+## Security
+
+This application implements comprehensive security measures including:
+
+- **CSRF Protection**: Token-based CSRF protection on all POST routes
+- **Secure Sessions**: httpOnly, sameSite cookies with production-grade settings
+- **Password Security**: Bcrypt hashing with 10 rounds
+- **Input Validation**: Comprehensive validation on all user inputs
+- **File Upload Security**: Type and size restrictions with validation
+
+For detailed security information, see [SECURITY.md](SECURITY.md).
+
+**Security Scan Results**: ✅ 0 vulnerabilities (CodeQL + npm audit)
+
+## Production Deployment
+
+Before deploying to production:
+
+1. Set `NODE_ENV=production` for secure cookies
+2. Use a strong `SESSION_SECRET` (32+ characters)
+3. Enable HTTPS/SSL
+4. Configure MongoDB with authentication
+5. Review security recommendations in SECURITY.md
+
 ## License
 
 MIT
