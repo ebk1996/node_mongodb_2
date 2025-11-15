@@ -6,11 +6,17 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
+const crypto = require('crypto');
 const { ObjectId } = require('mongodb');
 const connect = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// CSRF Token Generation
+function generateCSRFToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -48,7 +54,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: false, // Set to true if using HTTPS
+    secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+    httpOnly: true, // Prevents client-side JS from accessing the cookie
+    sameSite: 'strict', // CSRF protection
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
@@ -60,6 +68,24 @@ app.use('/uploads', express.static('uploads'));
 // View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// CSRF Protection Middleware
+app.use((req, res, next) => {
+  if (!req.session.csrfToken) {
+    req.session.csrfToken = generateCSRFToken();
+  }
+  res.locals.csrfToken = req.session.csrfToken;
+  next();
+});
+
+function verifyCSRF(req, res, next) {
+  const token = req.body._csrf || req.query._csrf || req.headers['x-csrf-token'];
+  if (token && token === req.session.csrfToken) {
+    next();
+  } else {
+    res.status(403).send('CSRF token validation failed');
+  }
+}
 
 // Database connection
 let db;
@@ -87,7 +113,7 @@ app.get('/register', (req, res) => {
   res.render('register', { error: null });
 });
 
-app.post('/register', async (req, res) => {
+app.post('/register', verifyCSRF, async (req, res) => {
   const { username, email, password, confirmPassword } = req.body;
   
   try {
@@ -142,7 +168,7 @@ app.get('/login', (req, res) => {
   res.render('login', { error: null });
 });
 
-app.post('/login', async (req, res) => {
+app.post('/login', verifyCSRF, async (req, res) => {
   const { email, password } = req.body;
   
   try {
@@ -202,7 +228,7 @@ app.get('/create-post', requireAuth, (req, res) => {
   res.render('create-post', { error: null, success: null });
 });
 
-app.post('/create-post', requireAuth, upload.fields([
+app.post('/create-post', requireAuth, verifyCSRF, upload.fields([
   { name: 'contentImage', maxCount: 1 },
   { name: 'faceImage', maxCount: 1 },
   { name: 'idImage', maxCount: 1 }
