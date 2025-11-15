@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Adult Content Platform</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <h1 class="nav-brand">Adult Content Platform</h1>
+      <div class="nav-links">
+        <span>Welcome, <%= username %>!</span>
+        <a href="/create-post" class="btn btn-primary">Create Post</a>
+        <a href="/logout" class="btn btn-secondary">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="dashboard">
+      <h2>Your Posts</h2>
+      
+      <% if (posts.length === 0) { %>
+        <div class="empty-state">
+          <p>You haven't created any posts yet.</p>
+          <a href="/create-post" class="btn btn-primary">Create Your First Post</a>
+        </div>
+      <% } else { %>
+        <div class="posts-grid">
+          <% posts.forEach(post => { %>
+            <div class="post-card">
+              <% if (post.contentImage) { %>
+                <div class="post-image">
+                  <img src="/uploads/<%= post.contentImage %>" alt="<%= post.title %>">
+                </div>
+              <% } %>
+              <div class="post-content">
+                <h3><%= post.title %></h3>
+                <p><%= post.description %></p>
+                <div class="post-meta">
+                  <span class="post-date"><%= new Date(post.createdAt).toLocaleDateString() %></span>
+                  <div class="verification-badges">
+                    <% if (post.ageConfirmed) { %>
+                      <span class="badge badge-success" title="Age Confirmed">18+</span>
+                    <% } %>
+                    <% if (post.faceVerified) { %>
+                      <span class="badge badge-info" title="Face Verified">Face ✓</span>
+                    <% } %>
+                    <% if (post.idVerified) { %>
+                      <span class="badge badge-warning" title="ID Verified">ID ✓</span>
+                    <% } %>
+                    <% if (post.ageVerified) { %>
+                      <span class="badge badge-primary" title="Age Verified">Age ✓</span>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Age Verification Modal -->
+  <div id="ageModal" class="modal">
+    <div class="modal-content">
+      <h2>Age Verification Required</h2>
+      <p>This website contains adult content. You must be 18 years or older to access this site.</p>
+      <p><strong>Are you 18 years of age or older?</strong></p>
+      <div class="modal-buttons">
+        <button onclick="confirmAge(true)" class="btn btn-primary">Yes, I am 18+</button>
+        <button onclick="confirmAge(false)" class="btn btn-secondary">No, I am under 18</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/age-verification.js"></script>
+</body>
+</html>
