@@ -61,3 +61,7 @@ Desktop.ini
 
 # MongoDB local data (if present accidentally)
 data/db/
+
+# Uploaded files
+uploads/
+!uploads/.gitkeep

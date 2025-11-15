@@ -6,10 +6,19 @@
   "author": "hlywd666@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.2.0",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",
-    "mongodb": "^6.16.0"
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "mongodb": "^6.16.0",
+    "multer": "^2.0.2"
   },
   "scripts": {
-    "start": "node program.js"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "legacy": "node program.js"
   }
 }

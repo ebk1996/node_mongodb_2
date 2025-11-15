@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Post - Adult Content Platform</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <h1 class="nav-brand">Adult Content Platform</h1>
+      <div class="nav-links">
+        <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="/logout" class="btn btn-secondary">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="create-post-container">
+      <h2>Create New Post</h2>
+      
+      <% if (error) { %>
+        <div class="error-message"><%= error %></div>
+      <% } %>
+      
+      <% if (success) { %>
+        <div class="success-message"><%= success %></div>
+      <% } %>
+      
+      <form method="POST" action="/create-post" enctype="multipart/form-data" id="createPostForm">
+        <div class="form-group">
+          <label for="title">Title *</label>
+          <input type="text" id="title" name="title" required maxlength="200">
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea id="description" name="description" required rows="5" maxlength="2000"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="contentImage">Content Image</label>
+          <input type="file" id="contentImage" name="contentImage" accept="image/*">
+          <small>Upload an image for your post (JPG, PNG, GIF)</small>
+        </div>
+        
+        <div class="verification-section">
+          <h3>Verification Requirements</h3>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="ageConfirmCheckbox" required>
+              I confirm that I am 18 years of age or older *
+            </label>
+            <input type="hidden" id="ageConfirmed" name="ageConfirmed" value="false">
+          </div>
+          
+          <div class="form-group">
+            <label for="faceImage">Face Verification Image</label>
+            <input type="file" id="faceImage" name="faceImage" accept="image/*">
+            <small>Upload a clear photo of your face for verification</small>
+            <div id="faceDetectionResult" class="detection-result"></div>
+            <canvas id="faceCanvas" style="display:none;"></canvas>
+            <input type="hidden" id="faceVerified" name="faceVerified" value="false">
+          </div>
+          
+          <div class="form-group">
+            <label for="idImage">ID Verification Image</label>
+            <input type="file" id="idImage" name="idImage" accept="image/*,application/pdf">
+            <small>Upload a photo of your government-issued ID</small>
+            <div id="idScanResult" class="detection-result"></div>
+            <input type="hidden" id="idVerified" name="idVerified" value="false">
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="ageVerifyCheckbox">
+              I have verified my age with a valid ID
+            </label>
+            <input type="hidden" id="ageVerified" name="ageVerified" value="false">
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Create Post</button>
+          <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Age Verification Modal -->
+  <div id="ageModal" class="modal">
+    <div class="modal-content">
+      <h2>Age Verification Required</h2>
+      <p>This website contains adult content. You must be 18 years or older to access this site.</p>
+      <p><strong>Are you 18 years of age or older?</strong></p>
+      <div class="modal-buttons">
+        <button onclick="confirmAge(true)" class="btn btn-primary">Yes, I am 18+</button>
+        <button onclick="confirmAge(false)" class="btn btn-secondary">No, I am under 18</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/age-verification.js"></script>
+  <script src="/js/face-scanner.js"></script>
+  <script src="/js/id-scanner.js"></script>
+  <script>
+    // Update hidden fields when checkboxes change
+    document.getElementById('ageConfirmCheckbox').addEventListener('change', function() {
+      document.getElementById('ageConfirmed').value = this.checked ? 'true' : 'false';
+    });
+    
+    document.getElementById('ageVerifyCheckbox').addEventListener('change', function() {
+      document.getElementById('ageVerified').value = this.checked ? 'true' : 'false';
+    });
+  </script>
+</body>
+</html>
